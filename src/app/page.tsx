@@ -422,13 +422,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Word reveal heading */}
-      <WordReveal />
-
-      {/* Testimonial cards */}
-      <div id="testimonials">
+      {/* Testimonials — word reveal + cards, one section */}
+      <section id="testimonials" className="bg-pink-50">
+        <WordReveal />
         <TestimonialSlider testimonials={TESTIMONIALS} />
-      </div>
+      </section>
 
       {/* User video reviews */}
       <section className="py-20 bg-gray-50">

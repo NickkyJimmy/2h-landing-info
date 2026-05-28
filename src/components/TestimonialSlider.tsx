@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence, useScroll } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface Testimonial {
   avatar: string;
@@ -12,112 +12,147 @@ interface Testimonial {
 }
 
 export default function TestimonialSlider({ testimonials }: { testimonials: Testimonial[] }) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [direction, setDirection] = useState(1);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
-  useEffect(() => {
-    const unsub = scrollYProgress.on('change', (v) => {
-      const idx = Math.min(Math.floor(v * testimonials.length), testimonials.length - 1);
-      setActive(idx);
-    });
-    return unsub;
-  }, [scrollYProgress, testimonials.length]);
+  function go(idx: number) {
+    setDirection(idx > active ? 1 : -1);
+    setActive(idx);
+  }
+  function prev() { if (active > 0) go(active - 1); }
+  function next() { if (active < testimonials.length - 1) go(active + 1); }
 
   const current = testimonials[active];
 
   return (
-    <div
-      ref={containerRef}
-      style={{ height: `${testimonials.length * 100}vh` }}
-      className="relative"
-    >
-      <div className="sticky top-0 h-screen flex items-center bg-gradient-to-br from-pink-50 to-white overflow-hidden">
-        {/* Background blob */}
-        <motion.div
-          className="absolute rounded-full bg-[#f95396]/8 blur-3xl pointer-events-none"
-          animate={{ scale: [1, 1.15, 1], x: [0, 20, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ width: 600, height: 600, top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-        />
+    <div className="pt-0 pb-16">
+      <div className="max-w-6xl mx-auto px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-12 items-start">
 
-        <div className="relative max-w-4xl mx-auto px-6 w-full text-center">
-          {/* Counter */}
-          <div className="flex items-center justify-center gap-3 mb-10">
-            <span className="text-2xl font-bold text-[#f95396] tabular-nums">
-              {String(active + 1).padStart(2, '0')}
-            </span>
-            <div className="flex gap-1.5">
-              {testimonials.map((_, i) => (
-                <motion.div
-                  key={i}
-                  animate={{ width: i === active ? 28 : 6, backgroundColor: i === active ? '#f95396' : '#f9539640' }}
-                  transition={{ duration: 0.3 }}
-                  className="h-1.5 rounded-full"
-                />
-              ))}
+          {/* Left — stats card */}
+          <div className="bg-white rounded-3xl p-8 relative select-none shadow-sm">
+            <span className="absolute top-5 left-5 text-pink-200 text-xl font-light">+</span>
+            <span className="absolute top-5 right-5 text-pink-200 text-xl font-light">+</span>
+
+            <div className="text-center py-8">
+              <p className="text-5xl font-bold text-pink-500">4.9/5</p>
+              <p className="text-gray-400 text-sm mt-2">Điểm hài lòng từ học viên</p>
             </div>
-            <span className="text-sm text-gray-400 tabular-nums">
-              {String(testimonials.length).padStart(2, '0')}
-            </span>
+
+            <div className="flex justify-center mb-2">
+              <div className="flex -space-x-3">
+                {testimonials.slice(0, 5).map((t, i) => (
+                  <div
+                    key={i}
+                    className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-white"
+                    style={{ zIndex: testimonials.length - i }}
+                  >
+                    <Image
+                      src={t.avatar}
+                      alt={t.name}
+                      width={80}
+                      height={80}
+                      sizes="80px"
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <p className="text-center text-gray-400 text-sm mb-8">100+ nhà lãnh đạo tin tưởng</p>
+
+            <span className="absolute bottom-24 left-5 text-pink-200 text-xl font-light">+</span>
+            <span className="absolute bottom-24 right-5 text-pink-200 text-xl font-light">+</span>
+
+            <a
+              href="#contact"
+              className="block w-full bg-pink-500 hover:bg-pink-600 transition-colors text-white rounded-full py-3.5 text-center font-semibold text-sm"
+            >
+              Đăng ký ngay
+            </a>
           </div>
 
-          {/* Quote mark */}
-          <div className="text-[#f95396]/20 text-9xl font-serif leading-none select-none -mb-4">"</div>
+          {/* Right — quote */}
+          <div className="pt-2 flex flex-col">
+            {/* Counter */}
+            <p className="text-pink-400 text-sm mb-8 tabular-nums font-medium">
+              {String(active + 1).padStart(2, '0')}
+              <span className="mx-2 text-gray-300">/</span>
+              {String(testimonials.length).padStart(2, '0')}
+            </p>
 
-          {/* Quote */}
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={active}
-              initial={{ opacity: 0, y: 30, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -30, scale: 0.97 }}
-              transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
-              className="max-w-3xl mx-auto text-2xl sm:text-3xl font-medium text-gray-800 leading-snug"
-            >
-              {current.comment}
-            </motion.p>
-          </AnimatePresence>
+            {/* Quote */}
+            <div className="min-h-[180px]">
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.p
+                  key={active}
+                  custom={direction}
+                  initial={{ opacity: 0, y: direction * 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: direction * -20 }}
+                  transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="text-2xl sm:text-3xl font-bold italic text-gray-900 leading-snug"
+                >
+                  &ldquo;{current.comment}&rdquo;
+                </motion.p>
+              </AnimatePresence>
+            </div>
 
-          {/* Divider */}
-          <motion.div
-            key={active + '-div'}
-            className="mt-8 mx-auto h-px bg-gradient-to-r from-transparent via-[#f95396]/40 to-transparent"
-            initial={{ width: '0%' }}
-            animate={{ width: '40%' }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          />
+            {/* Divider */}
+            <div className="mt-8 h-px bg-gradient-to-r from-pink-200 via-pink-400/40 to-transparent w-2/5" />
 
-          {/* Person */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active + '-person'}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, delay: 0.15 }}
-              className="mt-6 flex flex-col items-center gap-3"
-            >
-              <div className="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-[#f95396]/30">
-                <Image
-                  src={current.avatar}
-                  alt={current.name}
-                  width={112}
-                  height={112}
-                  sizes="112px"
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900 text-sm">{current.name}</p>
-                <p className="text-[#f95396] text-sm">{current.title}</p>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+            {/* Person */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active + '-person'}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25, delay: 0.1 }}
+                className="flex items-center gap-4 mt-6"
+              >
+                <div className="w-14 h-14 rounded-2xl overflow-hidden flex-shrink-0 ring-2 ring-pink-100">
+                  <Image
+                    src={current.avatar}
+                    alt={current.name}
+                    width={112}
+                    height={112}
+                    sizes="112px"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">{current.name}</p>
+                  <p className="text-pink-500 text-sm">{current.title}</p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Navigation arrows */}
+            <div className="flex items-center gap-3 mt-10">
+              <button
+                onClick={prev}
+                disabled={active === 0}
+                aria-label="Previous"
+                className="w-10 h-10 rounded-full border border-pink-200 flex items-center justify-center text-pink-300 disabled:opacity-25 hover:border-pink-400 hover:text-pink-500 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              <button
+                onClick={next}
+                disabled={active === testimonials.length - 1}
+                aria-label="Next"
+                className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white disabled:opacity-25 hover:bg-pink-600 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

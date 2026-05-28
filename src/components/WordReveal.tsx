@@ -25,19 +25,23 @@ const WORDS = [
 
 function WordToken({
   text,
+  bold,
   progress,
   rangeStart,
   rangeEnd,
 }: {
   text: string;
+  bold: boolean;
   progress: ReturnType<typeof useScroll>['scrollYProgress'];
   rangeStart: number;
   rangeEnd: number;
 }) {
-  const opacity    = useTransform(progress, [rangeStart, rangeEnd], [0.18, 1]);
-  const fontWeight = useTransform(progress, [rangeStart, rangeEnd], [400, 700]);
+  const opacity = useTransform(progress, [rangeStart, rangeEnd], [0.15, 0.85]);
   return (
-    <motion.span style={{ opacity, fontWeight }} className="mr-[0.3em] text-gray-900 inline-block">
+    <motion.span
+      style={{ opacity }}
+      className={`mr-[0.25em] inline-block${bold ? ' font-bold' : ''}`}
+    >
       {text}
     </motion.span>
   );
@@ -48,12 +52,12 @@ export default function WordReveal() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end end'],
+    offset: ['start 0.85', 'start 0.15'],
   });
 
   return (
-    <div ref={containerRef} style={{ height: '200vh' }} className="relative">
-      <div className="sticky top-0 h-screen flex items-center bg-white overflow-hidden">
+    <div ref={containerRef} className="relative">
+      <div className="bg-pink-50 overflow-hidden pt-32 pb-48">
         <div className="max-w-6xl mx-auto px-8 w-full grid grid-cols-[200px_1fr] gap-16 items-start">
 
           {/* Left — label */}
@@ -69,11 +73,12 @@ export default function WordReveal() {
 
           {/* Right — word-by-word reveal */}
           <div>
-            <p className="text-4xl sm:text-5xl leading-snug">
+            <p className="text-4xl sm:text-5xl leading-snug text-gray-900">
               {WORDS.map((w, i) => (
                 <WordToken
                   key={i}
                   text={w.text}
+                  bold={w.bold}
                   progress={scrollYProgress}
                   rangeStart={i / WORDS.length}
                   rangeEnd={(i + 1) / WORDS.length}

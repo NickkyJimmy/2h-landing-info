@@ -26,7 +26,7 @@ export default function SplineScene() {
   return (
     <div className="relative w-full h-full" style={{ pointerEvents: 'none' }}>
       <Spline
-        scene="https://prod.spline.design/1aP8j5q6F2tFndKy/scene.splinecode"
+        scene="https://draft.spline.design/7EgmxCI3JfQMJy5Z/scene.splinecode"
         onLoad={onLoad}
       />
       
