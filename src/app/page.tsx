@@ -160,6 +160,8 @@ export default function Home() {
 
         {/* Overlay gradient for readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent pointer-events-none" />
+        {/* Right-side cover to hide Spline watermark */}
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-white/80 to-transparent pointer-events-none" />
 
         {/* Content overlay */}
         <div className="relative z-10 flex items-center min-h-screen">
