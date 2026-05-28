@@ -75,9 +75,10 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
               <Image
                 src={t.avatar}
                 alt={t.name}
-                width={56}
-                height={56}
-                className="w-full h-full object-cover"
+                width={112}
+                height={112}
+                sizes="112px"
+                className="w-full h-full object-cover object-center"
               />
             </button>
           ))}
