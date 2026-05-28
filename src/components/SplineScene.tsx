@@ -1,11 +1,26 @@
 'use client';
 
 import Spline from '@splinetool/react-spline';
+import type { Application } from '@splinetool/runtime';
+
+function onLoad(app: Application) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const controls = (app as any)._camera?.controls;
+  if (controls) {
+    controls.enableRotate = false;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.autoRotate = false;
+  }
+}
 
 export default function SplineScene() {
   return (
-    <div className="relative w-full h-full">
-      <Spline scene="https://prod.spline.design/1aP8j5q6F2tFndKy/scene.splinecode" />
+    <div className="relative w-full h-full" style={{ pointerEvents: 'none' }}>
+      <Spline
+        scene="https://prod.spline.design/1aP8j5q6F2tFndKy/scene.splinecode"
+        onLoad={onLoad}
+      />
       {/* covers Spline watermark logo bottom-right */}
       <div
         className="absolute bottom-5 right-5 bg-white"
