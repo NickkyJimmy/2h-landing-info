@@ -6,7 +6,6 @@ import {
   HeroSection,
   FeatureSection,
   MetricsSection,
-  TestimonialSection,
   CTASection,
   SectionBlock,
   HeadingBlock,
@@ -25,6 +24,7 @@ import {
 import SplineScene from "@/components/SplineScene";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/FadeIn";
 import { motion } from "motion/react";
+import TestimonialSlider from "@/components/TestimonialSlider";
 
 const ACTIVITIES = [
   {
@@ -422,22 +422,9 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <TestimonialSection
-        idSection="testimonials"
-        template={2}
-        className="bg-white"
-        dataHeading={{
-          tagline: "Chia sẻ từ các nhà lãnh đạo",
-          title: "Cảm nhận sau khi tham gia",
-          align: "center",
-        }}
-        dataTestimonials={TESTIMONIALS.map((t) => ({
-          avatar: t.avatar,
-          name: t.name,
-          title: t.title,
-          comment: t.comment,
-        }))}
-      />
+      <FadeIn>
+        <TestimonialSlider testimonials={TESTIMONIALS} />
+      </FadeIn>
 
       {/* User video reviews */}
       <section className="py-20 bg-gray-50">
