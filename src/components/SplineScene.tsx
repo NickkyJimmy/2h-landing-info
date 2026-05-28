@@ -12,6 +12,14 @@ function onLoad(app: Application) {
     controls.enablePan = false;
     controls.autoRotate = false;
   }
+
+  // Hide "Built with Spline" watermark DOM overlay
+  setTimeout(() => {
+    document.querySelectorAll('a[href*="spline.design"], [class*="logo"], [id*="logo"]').forEach((el) => {
+      const anchor = el.closest('a') ?? el;
+      if (anchor instanceof HTMLElement) anchor.style.display = 'none';
+    });
+  }, 500);
 }
 
 export default function SplineScene() {
@@ -21,6 +29,7 @@ export default function SplineScene() {
         scene="https://prod.spline.design/1aP8j5q6F2tFndKy/scene.splinecode"
         onLoad={onLoad}
       />
+      
       {/* covers Spline watermark logo bottom-right */}
       <div
         className="absolute bottom-5 right-5 bg-white"

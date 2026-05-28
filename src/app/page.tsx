@@ -115,8 +115,8 @@ export default function Home() {
           <Image
             src="/assets/logo-2h.png"
             alt="Customer 2H"
-            width={80}
-            height={40}
+            width={328}
+            height={80}
             className="h-10 w-auto"
           />
 
