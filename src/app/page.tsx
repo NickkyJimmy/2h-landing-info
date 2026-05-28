@@ -25,6 +25,7 @@ import SplineScene from "@/components/SplineScene";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/FadeIn";
 import { motion } from "motion/react";
 import TestimonialSlider from "@/components/TestimonialSlider";
+import WordReveal from "@/components/WordReveal";
 
 const ACTIVITIES = [
   {
@@ -421,10 +422,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <FadeIn>
+      {/* Word reveal heading */}
+      <WordReveal />
+
+      {/* Testimonial cards */}
+      <div id="testimonials">
         <TestimonialSlider testimonials={TESTIMONIALS} />
-      </FadeIn>
+      </div>
 
       {/* User video reviews */}
       <section className="py-20 bg-gray-50">
