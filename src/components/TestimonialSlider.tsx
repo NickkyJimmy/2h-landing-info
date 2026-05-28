@@ -16,10 +16,10 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
   const current = testimonials[active];
 
   return (
-    <section id="testimonials" className="py-24 bg-[#eef1fb]">
+    <section id="testimonials" className="py-24 bg-gradient-to-br from-pink-50 to-white">
       <div className="max-w-3xl mx-auto px-6 text-center">
         {/* Decorative quote mark */}
-        <div className="text-[#c7cff0] text-8xl font-serif leading-none select-none mb-2">"</div>
+        <div className="text-[#f95396]/30 text-8xl font-serif leading-none select-none mb-2">"</div>
 
         {/* Quote */}
         <AnimatePresence mode="wait">
@@ -35,6 +35,9 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
           </motion.p>
         </AnimatePresence>
 
+        {/* Divider */}
+        <div className="mt-8 mx-auto w-12 h-0.5 bg-gradient-to-r from-[#ff82b2] to-[#f95396] rounded-full" />
+
         {/* Name + title */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -43,10 +46,10 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="mt-8"
+            className="mt-4"
           >
             <span className="font-semibold text-gray-900 text-sm">{current.name}</span>
-            <span className="text-gray-400 text-sm ml-2">{current.title}</span>
+            <span className="text-[#f95396] text-sm ml-2">{current.title}</span>
           </motion.div>
         </AnimatePresence>
 
@@ -58,12 +61,14 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
               onClick={() => setActive(i)}
               className="transition-all duration-300 focus:outline-none"
               style={{
-                width:  i === active ? 56 : 40,
-                height: i === active ? 56 : 40,
-                opacity: i === active ? 1 : 0.45,
-                borderRadius: '12px',
-                overflow: 'hidden',
-                flexShrink: 0,
+                width:        i === active ? 56 : 40,
+                height:       i === active ? 56 : 40,
+                opacity:      i === active ? 1 : 0.4,
+                borderRadius: '14px',
+                overflow:     'hidden',
+                flexShrink:   0,
+                outline:      i === active ? '2.5px solid #f95396' : 'none',
+                outlineOffset: '2px',
               }}
               aria-label={t.name}
             >
