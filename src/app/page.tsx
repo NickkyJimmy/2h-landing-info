@@ -24,7 +24,7 @@ import {
 } from "@momo-webplatform/mobase";
 import SplineScene from "@/components/SplineScene";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/FadeIn";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const ACTIVITIES = [
   {
@@ -153,36 +153,29 @@ export default function Home() {
 
       {/* Hero */}
       <section id="hero" className="relative w-full h-screen overflow-hidden">
-        {/* Spline full-bleed background */}
-        <div className="absolute inset-0 w-full h-full">
+        {/* Spline — right 60% only */}
+        <div className="absolute top-0 right-0 bottom-0 w-[60%]">
           <Suspense fallback={<div className="w-full h-full bg-gradient-to-br from-pink-50 to-white" />}>
             <SplineScene />
           </Suspense>
         </div>
 
-        {/* Overlay gradient for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent pointer-events-none" />
-        {/* Right-side cover to hide Spline watermark */}
-        <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-white/80 to-transparent pointer-events-none" />
+        {/* Fade left edge of Spline into white */}
+        <div className="absolute inset-y-0 left-[35%] w-40 bg-gradient-to-r from-white to-transparent pointer-events-none" />
 
         {/* Content overlay */}
         <div className="relative z-10 flex items-center min-h-screen">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 w-full">
-            <motion.div
-              className="max-w-xl"
-              initial="hidden"
-              animate="visible"
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
-            >
+            <div className="max-w-xl">
               <motion.span
                 className="text-sm font-semibold text-[#f95396] tracking-wide uppercase"
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
               >
                 Chương trình Customer 2H
               </motion.span>
               <motion.h1
                 className="mt-3 text-5xl sm:text-6xl font-bold text-gray-900 leading-tight"
-                variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.22 }}
               >
                 Vì bạn đâu thể{" "}
                 <span className="text-[#f95396]">đội trời</span>
@@ -192,13 +185,13 @@ export default function Home() {
               </motion.h1>
               <motion.p
                 className="mt-4 text-lg text-gray-700"
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.34 }}
               >
                 Để tầm nhìn của Manager chạm đến tim users
               </motion.p>
               <motion.div
                 className="mt-6 flex flex-wrap gap-2"
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.46 }}
               >
                 {["120 phút / tháng", "5 hoạt động", "Theo dõi & Ghi nhận"].map((pill) => (
                   <span
@@ -212,7 +205,7 @@ export default function Home() {
               </motion.div>
               <motion.div
                 className="mt-8 flex flex-wrap gap-3"
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.58 }}
               >
                 <a
                   href="#subscribe"
@@ -227,7 +220,7 @@ export default function Home() {
                   Tìm hiểu thêm
                 </a>
               </motion.div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
