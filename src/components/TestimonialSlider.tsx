@@ -4,6 +4,63 @@ import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 
+// ---------- Word-reveal heading ----------
+const HEADING_BOLD = ['Các', 'nhà', 'lãnh', 'đạo', 'MoMo'];
+const HEADING_LIGHT = ['chia', 'sẻ', 'cảm', 'nhận', 'thực', 'tế', 'sau', 'khi', 'tham', 'gia', 'chương', 'trình', 'Customer', '2H.'];
+const ALL_WORDS = [...HEADING_BOLD, ...HEADING_LIGHT];
+
+function WordReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.8', 'end 0.3'] });
+
+  return (
+    <div ref={ref} className="py-24 bg-[#f7f7f6]">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="flex items-center gap-2 mb-8 text-sm text-gray-500">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M21 21v-2a4 4 0 00-3-3.87"/></svg>
+          Testimonials
+        </div>
+        <p className="text-4xl sm:text-5xl font-bold leading-snug">
+          {ALL_WORDS.map((word, i) => {
+            const start = i / ALL_WORDS.length;
+            const end = (i + 1) / ALL_WORDS.length;
+            return (
+              <WordToken
+                key={i}
+                word={word}
+                progress={scrollYProgress}
+                rangeStart={start}
+                rangeEnd={end}
+                bold={i < HEADING_BOLD.length}
+              />
+            );
+          })}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function WordToken({
+  word, progress, rangeStart, rangeEnd, bold,
+}: {
+  word: string;
+  progress: ReturnType<typeof useScroll>['scrollYProgress'];
+  rangeStart: number;
+  rangeEnd: number;
+  bold: boolean;
+}) {
+  const opacity = useTransform(progress, [rangeStart, rangeEnd], [0.18, 1]);
+  return (
+    <motion.span
+      style={{ opacity }}
+      className={bold ? 'text-gray-900 mr-2' : 'text-gray-900 mr-2 font-normal'}
+    >
+      {word}{' '}
+    </motion.span>
+  );
+}
+
 interface Testimonial {
   avatar: string;
   name: string;
@@ -35,11 +92,13 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
   const current = testimonials[active];
 
   return (
-    // Tall scroll container (100vh per testimonial)
-    <div
-      ref={containerRef}
-      style={{ height: `${testimonials.length * 100}vh` }}
-      className="relative"
+    <div id="testimonials">
+      <WordReveal />
+      {/* Tall scroll container (100vh per testimonial) */}
+      <div
+        ref={containerRef}
+        style={{ height: `${testimonials.length * 100}vh` }}
+        className="relative"
     >
       {/* Sticky panel */}
       <div className="sticky top-0 h-screen flex items-center bg-gradient-to-br from-pink-50 to-white overflow-hidden">
@@ -140,6 +199,7 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
