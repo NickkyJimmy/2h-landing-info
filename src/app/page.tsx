@@ -23,6 +23,8 @@ import {
   CarouselPrevious,
 } from "@momo-webplatform/mobase";
 import SplineScene from "@/components/SplineScene";
+import { FadeIn, StaggerChildren, StaggerItem } from "@/components/FadeIn";
+import { motion } from "framer-motion";
 
 const ACTIVITIES = [
   {
@@ -121,7 +123,7 @@ export default function Home() {
           />
 
           {/* Nav — glass pill */}
-          <nav className="hidden md:flex items-center gap-6 rounded-2xl backdrop-blur-md bg-white/20 border border-white/30 shadow-lg shadow-black/5 px-6 h-12">
+          <nav className="hidden md:flex items-center gap-6 rounded-full backdrop-blur-md bg-white/20 border border-white/30 shadow-lg shadow-black/5 px-8 h-12">
             {[
               { label: "Giới thiệu", href: "#about" },
               { label: "Hoạt động", href: "#activities" },
@@ -166,21 +168,38 @@ export default function Home() {
         {/* Content overlay */}
         <div className="relative z-10 flex items-center min-h-screen">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 w-full">
-            <div className="max-w-xl">
-              <span className="text-sm font-semibold text-[#f95396] tracking-wide uppercase">
+            <motion.div
+              className="max-w-xl"
+              initial="hidden"
+              animate="visible"
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
+            >
+              <motion.span
+                className="text-sm font-semibold text-[#f95396] tracking-wide uppercase"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+              >
                 Chương trình Customer 2H
-              </span>
-              <h1 className="mt-3 text-5xl sm:text-6xl font-bold text-gray-900 leading-tight">
+              </motion.span>
+              <motion.h1
+                className="mt-3 text-5xl sm:text-6xl font-bold text-gray-900 leading-tight"
+                variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+              >
                 Vì bạn đâu thể{" "}
                 <span className="text-[#f95396]">đội trời</span>
                 <br />
                 Mà chân{" "}
                 <span className="text-[#f95396]">không chạm đất</span>
-              </h1>
-              <p className="mt-4 text-lg text-gray-700">
+              </motion.h1>
+              <motion.p
+                className="mt-4 text-lg text-gray-700"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+              >
                 Để tầm nhìn của Manager chạm đến tim users
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2">
+              </motion.p>
+              <motion.div
+                className="mt-6 flex flex-wrap gap-2"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+              >
                 {["120 phút / tháng", "5 hoạt động", "Theo dõi & Ghi nhận"].map((pill) => (
                   <span
                     key={pill}
@@ -190,8 +209,11 @@ export default function Home() {
                     {pill}
                   </span>
                 ))}
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3">
+              </motion.div>
+              <motion.div
+                className="mt-8 flex flex-wrap gap-3"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+              >
                 <a
                   href="#subscribe"
                   className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold bg-gradient-to-r from-[#ff82b2] to-[#f95396] text-white shadow-lg shadow-pink-200 hover:opacity-90 transition-opacity"
@@ -204,8 +226,8 @@ export default function Home() {
                 >
                   Tìm hiểu thêm
                 </a>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -241,13 +263,16 @@ export default function Home() {
       {/* Why / Feature section */}
       <section id="about" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <HeadingBlock
-            align="center"
-            tagline="Tại sao tham gia?"
-            title="Biến thấu cảm thành mục tiêu lãnh đạo"
-            description="Chương trình tạo cơ hội giúp Managers+ tương tác với Users ít nhất 2 giờ mỗi tháng qua các hoạt động thú vị"
-          />
-          <div className="mt-12 grid md:grid-cols-2 gap-8">
+          <FadeIn>
+            <HeadingBlock
+              align="center"
+              tagline="Tại sao tham gia?"
+              title="Biến thấu cảm thành mục tiêu lãnh đạo"
+              description="Chương trình tạo cơ hội giúp Managers+ tương tác với Users ít nhất 2 giờ mỗi tháng qua các hoạt động thú vị"
+            />
+          </FadeIn>
+          <StaggerChildren className="mt-12 grid md:grid-cols-2 gap-8">
+            <StaggerItem>
             <Card className="border border-pink-100 shadow-lg shadow-pink-50/50 rounded-3xl">
               <CardHeader>
                 <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center mb-2">
@@ -278,7 +303,9 @@ export default function Home() {
                 </ul>
               </CardContent>
             </Card>
+            </StaggerItem>
 
+            <StaggerItem>
             <Card className="border border-pink-100 shadow-lg shadow-pink-50/50 rounded-3xl overflow-hidden bg-gradient-to-br from-[#f95396] to-[#ff82b2] text-white">
               <CardHeader>
                 <Badge
@@ -302,7 +329,8 @@ export default function Home() {
                 </p>
               </CardContent>
             </Card>
-          </div>
+            </StaggerItem>
+          </StaggerChildren>
         </div>
       </section>
 
@@ -328,13 +356,15 @@ export default function Home() {
       {/* How it works */}
       <section id="how-it-works" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <HeadingBlock
-            align="center"
-            tagline="Hướng dẫn"
-            title="Cách chương trình Customer 2H vận hành"
-            description="Xem nhanh hành trình từ lúc đăng ký đến khi hoàn tất ghi nhận để mọi người cùng thấu cảm khách hàng và biến insight thành hành động."
-          />
-          <div className="mt-12 relative">
+          <FadeIn>
+            <HeadingBlock
+              align="center"
+              tagline="Hướng dẫn"
+              title="Cách chương trình Customer 2H vận hành"
+              description="Xem nhanh hành trình từ lúc đăng ký đến khi hoàn tất ghi nhận để mọi người cùng thấu cảm khách hàng và biến insight thành hành động."
+            />
+          </FadeIn>
+          <FadeIn delay={0.15} className="mt-12 relative">
             <Carousel
               opts={{ align: "start", loop: true }}
               className="w-full"
@@ -371,20 +401,22 @@ export default function Home() {
               <CarouselPrevious className="left-0" />
               <CarouselNext className="right-0" />
             </Carousel>
-          </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Leaderboard video */}
       <section id="leaderboard" className="py-20 bg-gradient-to-br from-pink-50 to-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <HeadingBlock
-            align="center"
-            tagline="Leaderboard"
-            title="Leaderboard November"
-            description="Xem lại video Leaderboard tháng 11."
-          />
-          <div className="mt-10 rounded-2xl overflow-hidden shadow-xl aspect-video">
+          <FadeIn>
+            <HeadingBlock
+              align="center"
+              tagline="Leaderboard"
+              title="Leaderboard November"
+              description="Xem lại video Leaderboard tháng 11."
+            />
+          </FadeIn>
+          <FadeIn delay={0.2} className="mt-10 rounded-2xl overflow-hidden shadow-xl aspect-video">
             <iframe
               src="https://www.youtube.com/embed/56PKT4H7Bt0"
               title="Leaderboard November"
@@ -392,7 +424,7 @@ export default function Home() {
               allowFullScreen
               className="w-full h-full"
             />
-          </div>
+          </FadeIn>
         </div>
       </section>
 
@@ -417,12 +449,15 @@ export default function Home() {
       {/* User video reviews */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <HeadingBlock
-            align="center"
-            tagline="Review từ người dùng"
-            title="Trải nghiệm nhanh từ người dùng qua các video ngắn"
-          />
-          <div className="mt-10 grid md:grid-cols-2 gap-8">
+          <FadeIn>
+            <HeadingBlock
+              align="center"
+              tagline="Review từ người dùng"
+              title="Trải nghiệm nhanh từ người dùng qua các video ngắn"
+            />
+          </FadeIn>
+          <StaggerChildren className="mt-10 grid md:grid-cols-2 gap-8">
+            <StaggerItem>
             <Card className="rounded-2xl overflow-hidden shadow-md border border-pink-50">
               <CardHeader>
                 <CardTitle className="text-base">
@@ -441,6 +476,8 @@ export default function Home() {
                 />
               </CardContent>
             </Card>
+            </StaggerItem>
+            <StaggerItem>
             <Card className="rounded-2xl overflow-hidden shadow-md border border-pink-50">
               <CardHeader>
                 <CardTitle className="text-base">Bí kíp trẻ hơn 10 tuổi</CardTitle>
@@ -457,7 +494,8 @@ export default function Home() {
                 />
               </CardContent>
             </Card>
-          </div>
+            </StaggerItem>
+          </StaggerChildren>
         </div>
       </section>
 
@@ -489,6 +527,7 @@ export default function Home() {
 
       {/* Contact */}
       <SectionBlock className="bg-white py-12">
+        <FadeIn>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <HeadingBlock
             align="center"
@@ -503,10 +542,12 @@ export default function Home() {
             customer2h@mservice.com.vn
           </a>
         </div>
+        </FadeIn>
       </SectionBlock>
 
       {/* Footer */}
       <footer className="bg-gray-50 border-t border-gray-100 py-10">
+        <FadeIn direction="none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <Image
@@ -533,6 +574,7 @@ export default function Home() {
             />
           </div>
         </div>
+        </FadeIn>
       </footer>
     </main>
   );
