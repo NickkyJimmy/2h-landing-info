@@ -110,44 +110,42 @@ export default function Home() {
     <main className="flex flex-col w-full overflow-hidden">
       {/* Glass Header */}
       <header className="fixed top-0 left-0 right-0 z-50">
-        <div className="mx-4 mt-4 rounded-2xl backdrop-blur-md bg-white/20 border border-white/30 shadow-lg shadow-black/5">
-          <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            {/* Logo */}
-            <Image
-              src="/assets/images/logo.png"
-              alt="Customer 2H"
-              width={100}
-              height={30}
-              className="h-8 w-auto"
-            />
+        <div className="max-w-7xl mx-auto px-6 mt-4 flex items-center justify-between">
+          {/* Logo — no glass */}
+          <Image
+            src="/assets/logo-2h.png"
+            alt="Customer 2H"
+            width={80}
+            height={40}
+            className="h-10 w-auto"
+          />
 
-            {/* Nav */}
-            <nav className="hidden md:flex items-center gap-6">
-              {[
-                { label: "Giới thiệu", href: "#about" },
-                { label: "Hoạt động", href: "#activities" },
-                { label: "Hướng dẫn", href: "#how-it-works" },
-                { label: "Leaderboard", href: "#leaderboard" },
-                { label: "Chia sẻ", href: "#testimonials" },
-              ].map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="text-sm font-medium text-gray-700 hover:text-[#f95396] transition-colors"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
+          {/* Nav — glass pill */}
+          <nav className="hidden md:flex items-center gap-6 rounded-2xl backdrop-blur-md bg-white/20 border border-white/30 shadow-lg shadow-black/5 px-6 h-12">
+            {[
+              { label: "Giới thiệu", href: "#about" },
+              { label: "Hoạt động", href: "#activities" },
+              { label: "Hướng dẫn", href: "#how-it-works" },
+              { label: "Leaderboard", href: "#leaderboard" },
+              { label: "Chia sẻ", href: "#testimonials" },
+            ].map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-sm font-medium text-gray-700 hover:text-[#f95396] transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
 
-            {/* CTA */}
-            <a
-              href="#subscribe"
-              className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold bg-gradient-to-r from-[#ff82b2] to-[#f95396] text-white shadow-md shadow-pink-200/50 hover:opacity-90 transition-opacity"
-            >
-              Đăng ký ngay
-            </a>
-          </div>
+          {/* CTA — no glass */}
+          <a
+            href="#subscribe"
+            className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold bg-gradient-to-r from-[#ff82b2] to-[#f95396] text-white shadow-md shadow-pink-200/50 hover:opacity-90 transition-opacity"
+          >
+            Đăng ký ngay
+          </a>
         </div>
       </header>
 
