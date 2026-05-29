@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 
 function BottomBlur() {
   const [hidden, setHidden] = useState(true);
@@ -73,9 +73,9 @@ import {
 import { useScrollCount } from "@/components/CountUp";
 import SplineScene from "@/components/SplineScene";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/FadeIn";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import TestimonialSlider from "@/components/TestimonialSlider";
-import WordReveal from "@/components/WordReveal";
+import WordReveal, { WordRevealText } from "@/components/WordReveal";
 
 const ACTIVITIES = [
   {
@@ -106,11 +106,11 @@ const ACTIVITIES = [
 ];
 
 const GUIDELINES = [
-  { src: "/assets/guideline/guideline_1.png", alt: "Chọn hoạt động" },
-  { src: "/assets/guideline/guideline_2.png", alt: "Nhận nhắc lịch" },
-  { src: "/assets/guideline/guideline_3.png", alt: "Trải nghiệm" },
-  { src: "/assets/guideline/guideline_4.png", alt: "Ghi nhận" },
-  { src: "/assets/guideline/guideline_5.png", alt: "Chia sẻ & follow-up" },
+  { src: "/assets/guideline/guideline_1.png", title: "Chọn hoạt động", description: "Chọn 1 trong 5 hoạt động phù hợp với lịch của bạn — User Immersion, CS Shadowing, CS Audio Review, CEE Report hoặc User Walk In." },
+  { src: "/assets/guideline/guideline_2.png", title: "Nhận nhắc lịch", description: "Hệ thống sẽ gửi lịch nhắc và thông tin cần thiết để bạn chuẩn bị trước khi tham gia." },
+  { src: "/assets/guideline/guideline_3.png", title: "Trải nghiệm", description: "Tham gia trực tiếp — gặp gỡ, lắng nghe và quan sát khách hàng thực tế trong môi trường của họ." },
+  { src: "/assets/guideline/guideline_4.png", title: "Ghi nhận", description: "Ghi lại những insight quan trọng và nộp báo cáo sau buổi để đóng góp vào kho dữ liệu thấu cảm của MoMo." },
+  { src: "/assets/guideline/guideline_5.png", title: "Chia sẻ & follow-up", description: "Chia sẻ insight với team và theo dõi những thay đổi bạn muốn thực hiện dựa trên những gì đã học được." },
 ];
 
 const TESTIMONIALS = [
@@ -158,6 +158,42 @@ const TESTIMONIALS = [
   },
 ];
 
+function ParallaxCard({
+  activity,
+  aspect,
+  onInView,
+}: {
+  activity: { name: string; description: string; image: string };
+  aspect: string;
+  onInView?: () => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start end', 'end start'] });
+  const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || !onInView) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) onInView(); }, { threshold: 0.4 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [onInView]);
+
+  return (
+    <div ref={containerRef} className={`relative ${aspect} rounded-3xl overflow-hidden`}>
+      <motion.div style={{ y }} className="absolute inset-0 scale-[1.2]">
+        <Image
+          src={activity.image}
+          alt={activity.name}
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 55vw"
+        />
+      </motion.div>
+    </div>
+  );
+}
+
 function MetricCard({
   end,
   useLocale,
@@ -183,6 +219,8 @@ function MetricCard({
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeActivity, setActiveActivity] = useState(0);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.8);
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -198,7 +236,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="flex flex-col w-full overflow-hidden">
+    <main className="flex flex-col w-full">
       <BottomBlur />
 
       {/* Header */}
@@ -353,190 +391,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why / Feature section */}
-      <section id="about" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <HeadingBlock
-              align="center"
-              tagline="Tại sao tham gia?"
-              title="Biến thấu cảm thành mục tiêu lãnh đạo"
-              description="Chương trình tạo cơ hội giúp Managers+ tương tác với Users ít nhất 2 giờ mỗi tháng qua các hoạt động thú vị"
-            />
-          </FadeIn>
-          <StaggerChildren className="mt-12 grid md:grid-cols-2 gap-8">
-            <StaggerItem>
-            <Card className="border border-pink-100 shadow-lg shadow-pink-50/50 rounded-3xl">
-              <CardHeader>
-                <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center mb-2">
-                  <span className="text-xl">💡</span>
-                </div>
-                <CardTitle className="text-xl">
-                  Lan toả tinh thần Customer Centricity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Chương trình tạo cơ hội giúp Managers+ tương tác với Users ít
-                  nhất 2 giờ mỗi tháng qua các hoạt động thú vị.
-                </CardDescription>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#f95396] flex-shrink-0" />
-                    120 phút với khách hàng.
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#f95396] flex-shrink-0" />
-                    Lắng nghe, quan sát, cảm nhận thực tế.
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#f95396] flex-shrink-0" />
-                    Ghi chú, audio, video và phân tích.
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-            </StaggerItem>
-
-            <StaggerItem>
-            <Card className="border border-pink-100 shadow-lg shadow-pink-50/50 rounded-3xl overflow-hidden bg-gradient-to-br from-[#f95396] to-[#ff82b2] text-white">
-              <CardHeader>
-                <Badge
-                  variant="outline"
-                  className="w-fit border-white/40 text-white text-xs mb-2"
-                >
-                  Tốc độ cảm User Vượt Xa Ánh Sáng!
-                </Badge>
-                <CardTitle className="text-xl text-white">
-                  Thành quả tháng 11
-                </CardTitle>
-                <CardDescription className="text-white/80">
-                  Số phút chạm User của toàn công ty
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-5xl font-bold text-white">22,431</p>
-                <p className="text-sm text-white/80 mt-2">phút</p>
-                <p className="text-sm text-white/70 mt-4">
-                  Gấp 400 lần thời gian ánh sáng từ Trái Đất đến Sao Thổ
-                </p>
-              </CardContent>
-            </Card>
-            </StaggerItem>
-          </StaggerChildren>
-        </div>
-      </section>
-
-      {/* Activities */}
-      <section id="activities" className="bg-[#f7f7f5] py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
-
-          {/* Header — two column like Noora */}
-          <FadeIn>
-            <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-12 mb-16">
-              {/* Left label */}
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <rect x="2" y="3" width="20" height="14" rx="2"/>
-                  <path d="M8 21h8M12 17v4"/>
-                </svg>
-                Hoạt động
-              </div>
-              {/* Right — heading + desc + CTA */}
-              <div>
-                <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight mb-4">
-                  5 cách gặp<br />khách hàng
-                </h2>
-                <p className="text-gray-500 text-lg mb-8 max-w-md">
-                  Chọn hoạt động phù hợp với lịch trình và phong cách làm việc của bạn.
-                </p>
-                <a
-                  href="#how-it-works"
-                  className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-700 transition-colors text-white rounded-full px-6 py-3 text-sm font-semibold"
-                >
-                  Xem hướng dẫn
-                </a>
-              </div>
-            </div>
-          </FadeIn>
-
-          {/* Bento card grid */}
-          <StaggerChildren className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-
-            {ACTIVITIES.map((a, i) => (
-              <StaggerItem key={a.name} className={i === 4 ? 'sm:col-span-3' : 'sm:col-span-1'}>
-                <div className="group cursor-default">
-                  <Image
-                    src={a.image}
-                    alt={a.name}
-                    width={800}
-                    height={800}
-                    sizes={i === 4 ? '100vw' : '33vw'}
-                    className="w-full h-auto rounded-3xl group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <p className="font-semibold text-gray-900 mt-3">{a.name}</p>
-                  <p className="text-gray-500 text-sm mt-0.5">{a.description}</p>
-                </div>
-              </StaggerItem>
-            ))}
-
-          </StaggerChildren>
-
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section id="how-it-works" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <HeadingBlock
-              align="center"
-              tagline="Hướng dẫn"
-              title="Cách chương trình Customer 2H vận hành"
-              description="Xem nhanh hành trình từ lúc đăng ký đến khi hoàn tất ghi nhận để mọi người cùng thấu cảm khách hàng và biến insight thành hành động."
-            />
-          </FadeIn>
-          <FadeIn delay={0.15} className="mt-12 relative">
-            <Carousel
-              opts={{ align: "start", loop: true }}
-              className="w-full"
-            >
-              <CarouselContent>
-                {GUIDELINES.map((g, i) => (
-                  <CarouselItem
-                    key={i}
-                    className="basis-full sm:basis-1/2 lg:basis-1/3"
-                  >
-                    <div className="p-2">
-                      <Card className="rounded-2xl overflow-hidden border border-pink-100">
-                        <div className="relative aspect-[4/3] w-full">
-                          <Image
-                            src={g.src}
-                            alt={g.alt}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <CardContent className="p-4">
-                          <p className="text-sm font-medium text-gray-700 text-center">
-                            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#f95396] text-white text-xs mr-2">
-                              {i + 1}
-                            </span>
-                            {g.alt}
-                          </p>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-0" />
-              <CarouselNext className="right-0" />
-            </Carousel>
-          </FadeIn>
-        </div>
-      </section>
-
       {/* Leaderboard video */}
       <section id="leaderboard" className="py-20 bg-gradient-to-br from-pink-50 to-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -557,6 +411,159 @@ export default function Home() {
               className="w-full h-full"
             />
           </FadeIn>
+        </div>
+      </section>
+
+      {/* Why / Feature section */}
+      <section id="about" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <HeadingBlock
+              align="center"
+              tagline="Tại sao tham gia?"
+              title="Biến thấu cảm thành mục tiêu lãnh đạo"
+              description="Chương trình tạo cơ hội giúp Managers+ tương tác với Users ít nhất 2 giờ mỗi tháng qua các hoạt động thú vị"
+            />
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Activities */}
+      <section id="activities" className="bg-[#f7f7f5] py-20 pb-[30vh]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-12 items-start">
+
+            {/* Left — sticky: label + static heading + desc + animated card info */}
+            <div className="lg:sticky lg:top-28 flex flex-col gap-5">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <path d="M8 21h8M12 17v4"/>
+                </svg>
+                Hoạt động
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+                5 cách gặp<br />khách hàng
+              </h2>
+              <p className="text-gray-500 text-lg">
+                Chọn hoạt động phù hợp với lịch trình và phong cách làm việc của bạn.
+              </p>
+              {/* Animated card title + description replaces CTA button */}
+              <div className="mt-2 border-t border-gray-200 pt-5">
+                <p className="text-pink-400 text-sm tabular-nums font-medium mb-3">
+                  {String(activeActivity + 1).padStart(2, '0')}
+                  <span className="mx-2 text-gray-300">/</span>
+                  {String(ACTIVITIES.length).padStart(2, '0')}
+                </p>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeActivity}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                    className="flex flex-col gap-2"
+                  >
+                    <p className="font-semibold text-gray-900">{ACTIVITIES[activeActivity].name}</p>
+                    <p className="text-gray-500 text-sm leading-relaxed">{ACTIVITIES[activeActivity].description}</p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Right — 5 image-only cards, each floats at different speed */}
+            <div className="flex flex-col gap-6">
+              {ACTIVITIES.map((a, i) => (
+                <ParallaxCard
+                  key={a.name}
+                  activity={a}
+                  aspect="aspect-[4/3]"
+                  onInView={() => setActiveActivity(i)}
+                />
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section id="how-it-works" className="bg-white py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+
+          {/* Header — testimonial 2-col layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-12 items-start mb-20">
+            <div className="flex items-center gap-2 text-sm text-gray-500 pt-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                <path d="M9 12h6M9 16h4"/>
+              </svg>
+              Hướng dẫn
+            </div>
+            <div>
+              <WordRevealText
+                words={[
+                  { text: 'Cách', bold: true },
+                  { text: 'chương', bold: true },
+                  { text: 'trình', bold: true },
+                  { text: 'Customer', bold: true },
+                  { text: '2H', bold: true },
+                  { text: 'vận' },
+                  { text: 'hành' },
+                ]}
+                className="text-3xl sm:text-4xl lg:text-5xl leading-snug text-gray-900 mb-4"
+              />
+              <p className="text-gray-500 text-lg mt-4">
+                Hành trình từ lúc đăng ký đến khi chia sẻ insight — đơn giản, linh hoạt, có tác động.
+              </p>
+            </div>
+          </div>
+
+          {/* Zigzag steps */}
+          <div className="flex flex-col">
+            {GUIDELINES.map((g, i) => {
+              const isEven = i % 2 === 0;
+              return (
+                <div key={i} className="relative">
+                  {/* Step row */}
+                  <FadeIn direction="none">
+                    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-10 items-center ${isEven ? '' : 'lg:[direction:rtl]'}`}>
+                      {/* Image */}
+                      <div className="lg:[direction:ltr]">
+                        <div className="rounded-3xl overflow-hidden">
+                          <Image
+                            src={g.src}
+                            alt={g.title}
+                            width={800}
+                            height={600}
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                            className="w-full h-auto"
+                          />
+                        </div>
+                      </div>
+                      {/* Text */}
+                      <div className="lg:[direction:ltr] flex flex-col gap-4 px-2 lg:px-8">
+                        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-pink-50 text-pink-500 font-bold text-sm">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <p className="text-2xl sm:text-3xl font-bold text-gray-900">{g.title}</p>
+                        <p className="text-gray-500 leading-relaxed">{g.description}</p>
+                      </div>
+                    </div>
+                  </FadeIn>
+
+                  {/* Connector line */}
+                  {i < GUIDELINES.length - 1 && (
+                    <div className="flex justify-center my-8">
+                      <div className="w-px h-12 bg-gradient-to-b from-pink-200 to-transparent" />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
         </div>
       </section>
 

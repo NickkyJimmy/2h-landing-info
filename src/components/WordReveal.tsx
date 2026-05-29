@@ -3,6 +3,60 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 
+function RevealToken({
+  text,
+  bold,
+  progress,
+  rangeStart,
+  rangeEnd,
+}: {
+  text: string;
+  bold?: boolean;
+  progress: ReturnType<typeof useScroll>['scrollYProgress'];
+  rangeStart: number;
+  rangeEnd: number;
+}) {
+  const opacity = useTransform(progress, [rangeStart, rangeEnd], [0.15, 0.85]);
+  return (
+    <motion.span
+      style={{ opacity }}
+      className={`mr-[0.25em] inline-block${bold ? ' font-bold' : ''}`}
+    >
+      {text}
+    </motion.span>
+  );
+}
+
+export function WordRevealText({
+  words,
+  className = 'text-3xl sm:text-4xl lg:text-5xl leading-snug text-gray-900',
+}: {
+  words: { text: string; bold?: boolean }[];
+  className?: string;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'start start'],
+  });
+  return (
+    <div ref={containerRef}>
+      <p className={className}>
+        {words.map((w, i) => (
+          <RevealToken
+            key={i}
+            text={w.text}
+            bold={w.bold}
+            progress={scrollYProgress}
+            rangeStart={i / words.length}
+            rangeEnd={(i + 1) / words.length}
+          />
+        ))}
+      </p>
+    </div>
+  );
+}
+
 const WORDS = [
   { text: 'Các',      bold: true  },
   { text: 'nhà',      bold: true  },
