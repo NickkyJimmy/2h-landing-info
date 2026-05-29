@@ -393,24 +393,30 @@ export default function Home() {
 
       {/* Leaderboard video */}
       <section id="leaderboard" className="py-20 bg-gradient-to-br from-pink-50 to-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <HeadingBlock
-              align="center"
-              tagline="Leaderboard"
-              title="Leaderboard November"
-              description="Xem lại video Leaderboard tháng 11."
-            />
-          </FadeIn>
-          <FadeIn delay={0.2} className="mt-10 rounded-2xl overflow-hidden shadow-xl aspect-video">
-            <iframe
-              src="https://www.youtube.com/embed/56PKT4H7Bt0"
-              title="Leaderboard November"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </FadeIn>
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            {/* Left — text */}
+            <FadeIn>
+              <p className="text-sm font-semibold text-pink-500 uppercase tracking-widest mb-4">Leaderboard</p>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight mb-4">Leaderboard November</h2>
+              <p className="text-gray-500 text-lg">Xem lại video Leaderboard tháng 11.</p>
+            </FadeIn>
+
+            {/* Right — video */}
+            <FadeIn delay={0.2}>
+              <div className="rounded-2xl overflow-hidden shadow-xl aspect-video">
+                <iframe
+                  src="https://www.youtube.com/embed/56PKT4H7Bt0"
+                  title="Leaderboard November"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              </div>
+            </FadeIn>
+
+          </div>
         </div>
       </section>
 
@@ -575,55 +581,84 @@ export default function Home() {
       </section>
 
       {/* User video reviews */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <HeadingBlock
-              align="center"
-              tagline="Review từ người dùng"
-              title="Trải nghiệm nhanh từ người dùng qua các video ngắn"
+      <section className="py-20 bg-pink-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+
+          {/* Full-width word reveal heading */}
+          <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-12 mb-12 items-start">
+            <div className="flex items-center gap-2 text-sm text-gray-500 pt-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M15 10l4.553-2.069A1 1 0 0121 8.87V15.13a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+              </svg>
+              Review từ người dùng
+            </div>
+            <WordRevealText
+              words={[
+                { text: 'Nghe', bold: true },
+                { text: 'chính', bold: true },
+                { text: 'những', bold: true },
+                { text: 'người', bold: true },
+                { text: 'trong', bold: false },
+                { text: 'cuộc', bold: false },
+                { text: 'chia', bold: false },
+                { text: 'sẻ', bold: false },
+                { text: 'về', bold: false },
+                { text: 'hành', bold: false },
+                { text: 'trình', bold: false },
+                { text: 'Customer', bold: false },
+                { text: '2H.', bold: false },
+              ]}
+              className="text-3xl sm:text-4xl lg:text-5xl leading-snug text-gray-900"
             />
-          </FadeIn>
-          <StaggerChildren className="mt-10 grid md:grid-cols-2 gap-8">
-            <StaggerItem>
-            <Card className="rounded-2xl overflow-hidden shadow-md border border-pink-50">
-              <CardHeader>
-                <CardTitle className="text-base">
-                  Top 1 Chạm user 12/2024
-                </CardTitle>
-                <CardDescription>
-                  Anh Nghĩa, người chạy đua vĩ đại đã cán đích đầu tiên trong tháng 12/2024.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="aspect-video p-0">
-                <video
-                  src="https://raw.githubusercontent.com/thanhdo5-momo/2h-qr-standee/main/assets/videos/1.mp4"
-                  controls
-                  className="w-full h-full object-cover"
-                  preload="metadata"
-                />
-              </CardContent>
-            </Card>
-            </StaggerItem>
-            <StaggerItem>
-            <Card className="rounded-2xl overflow-hidden shadow-md border border-pink-50">
-              <CardHeader>
-                <CardTitle className="text-base">Bí kíp trẻ hơn 10 tuổi</CardTitle>
-                <CardDescription>
-                  Anh Huỳnh đã trẻ hơn tận 10 tuổi sau khi gặp user 120 phút hàng tháng.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="aspect-video p-0">
-                <video
-                  src="https://raw.githubusercontent.com/thanhdo5-momo/2h-qr-standee/main/assets/videos/2.mp4"
-                  controls
-                  className="w-full h-full object-cover"
-                  preload="metadata"
-                />
-              </CardContent>
-            </Card>
-            </StaggerItem>
-          </StaggerChildren>
+          </div>
+
+          {/* Bottom: description+CTA left, videos right */}
+          <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-12 items-stretch">
+
+            {/* Left — description + CTA pinned to bottom */}
+            <div className="flex flex-col justify-end gap-6 self-stretch">
+              <p className="text-gray-500 text-base leading-relaxed mt-auto">
+                Những khoảnh khắc thực tế từ các nhà lãnh đạo MoMo sau khi tham gia chương trình Customer 2H.
+              </p>
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 bg-pink-500 hover:bg-pink-600 transition-colors text-white rounded-full px-6 py-3.5 font-semibold text-sm self-start"
+              >
+                Đăng ký tham gia
+              </a>
+            </div>
+
+            {/* Right — asymmetric two videos */}
+            <div className="flex flex-col sm:flex-row items-start gap-6">
+
+              {/* Left video — tall portrait */}
+              <FadeIn className="w-full sm:w-[55%] flex-shrink-0">
+                <div className="rounded-2xl overflow-hidden aspect-[2/3]">
+                  <video
+                    src="https://raw.githubusercontent.com/thanhdo5-momo/2h-qr-standee/main/assets/videos/1.mp4"
+                    controls
+                    className="w-full h-full object-cover"
+                    preload="metadata"
+                  />
+                </div>
+                <p className="font-bold text-gray-900 mt-4 text-base leading-snug">Top 1 Chạm user 12/2024</p>
+              </FadeIn>
+
+              {/* Right video — shorter */}
+              <FadeIn delay={0.15} className="w-full sm:w-[45%] flex-shrink-0">
+                <div className="rounded-2xl overflow-hidden aspect-[3/4]">
+                  <video
+                    src="https://raw.githubusercontent.com/thanhdo5-momo/2h-qr-standee/main/assets/videos/2.mp4"
+                    controls
+                    className="w-full h-full object-cover"
+                    preload="metadata"
+                  />
+                </div>
+                <p className="font-bold text-gray-900 mt-4 text-base leading-snug">Bí kíp trẻ hơn 10 tuổi</p>
+              </FadeIn>
+
+            </div>
+          </div>
         </div>
       </section>
 
@@ -670,17 +705,17 @@ export default function Home() {
 
         {/* Top: logo/contact left, newsletter right */}
         <div className="max-w-6xl mx-auto px-4 sm:px-8 pt-16 pb-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-16 items-start">
 
-            {/* Left — brand + contact */}
-            <div className="flex flex-col gap-6">
-              <Image src="/assets/logo-2h.png" alt="Customer 2H" width={328} height={80} />
-              <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
+            {/* Left — brand + contact (scaled down) */}
+            <div className="flex flex-col gap-4">
+              <Image src="/assets/logo-2h.png" alt="Customer 2H" width={200} height={49} />
+              <p className="text-gray-400 text-xs leading-relaxed max-w-[220px]">
                 Connecting customers · Inspiring insights · Better operations
               </p>
-              <div className="mt-4 flex flex-col gap-3">
-                <p className="text-xs text-gray-400 uppercase tracking-widest">[ Email ]</p>
-                <a href="mailto:customer2h@mservice.com.vn" className="text-gray-800 hover:text-pink-500 transition-colors text-sm font-medium">
+              <div className="mt-2 flex flex-col gap-2">
+                <p className="text-[10px] text-gray-400 uppercase tracking-widest">[ Email ]</p>
+                <a href="mailto:customer2h@mservice.com.vn" className="text-gray-700 hover:text-pink-500 transition-colors text-xs font-medium">
                   customer2h@mservice.com.vn
                 </a>
               </div>
