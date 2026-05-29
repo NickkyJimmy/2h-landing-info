@@ -180,17 +180,17 @@ function ParallaxCard({
   }, [onInView]);
 
   return (
-    <div ref={containerRef} className={`relative ${aspect} rounded-3xl overflow-hidden`}>
-      <motion.div style={{ y }} className="absolute inset-0 scale-[1.2]">
-        <Image
-          src={activity.image}
-          alt={activity.name}
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 55vw"
-        />
-      </motion.div>
-    </div>
+    <motion.div ref={containerRef} style={{ y }} className="rounded-3xl overflow-hidden">
+      <Image
+        src={activity.image}
+        alt={activity.name}
+        width={800}
+        height={600}
+        className="w-full h-auto"
+        sizes="(max-width: 1024px) 100vw, 55vw"
+        quality={60}
+      />
+    </motion.div>
   );
 }
 
@@ -477,7 +477,7 @@ export default function Home() {
                 <ParallaxCard
                   key={a.name}
                   activity={a}
-                  aspect="aspect-[4/3]"
+                  aspect="aspect-video"
                   onInView={() => setActiveActivity(i)}
                 />
               ))}
@@ -539,6 +539,7 @@ export default function Home() {
                             height={600}
                             sizes="(max-width: 1024px) 100vw, 50vw"
                             className="w-full h-auto"
+                            quality={60}
                           />
                         </div>
                       </div>
