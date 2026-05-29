@@ -25,8 +25,8 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
   const current = testimonials[active];
 
   return (
-    <div className="pt-0 pb-16">
-      <div className="max-w-6xl mx-auto px-8">
+    <div className="pt-0 pb-10 sm:pb-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-12 items-start">
 
           {/* Left — stats card */}
@@ -82,7 +82,7 @@ export default function TestimonialSlider({ testimonials }: { testimonials: Test
             </p>
 
             {/* Quote */}
-            <div className="min-h-[180px]">
+            <div className="min-h-[140px] sm:min-h-[180px]">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.p
                   key={active}

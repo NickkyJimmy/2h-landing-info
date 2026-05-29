@@ -52,16 +52,16 @@ export default function WordReveal() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start 0.85', 'start 0.15'],
+    offset: ['start end', 'start start'],
   });
 
   return (
     <div ref={containerRef} className="relative">
-      <div className="bg-pink-50 overflow-hidden pt-32 pb-48">
-        <div className="max-w-6xl mx-auto px-8 w-full grid grid-cols-[200px_1fr] gap-16 items-start">
+      <div className="relative bg-pink-50 overflow-hidden pt-16 pb-12 sm:pt-24 sm:pb-20 lg:pt-32 lg:pb-48">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 w-full">
 
-          {/* Left — label */}
-          <div className="flex items-center gap-2 text-sm text-gray-500 pt-2">
+          {/* Label */}
+          <div className="flex items-center gap-2 text-sm text-gray-500 mb-6 lg:hidden">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <circle cx="9" cy="7" r="4"/>
               <path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
@@ -71,23 +71,40 @@ export default function WordReveal() {
             Testimonials
           </div>
 
-          {/* Right — word-by-word reveal */}
-          <div>
-            <p className="text-4xl sm:text-5xl leading-snug text-gray-900">
-              {WORDS.map((w, i) => (
-                <WordToken
-                  key={i}
-                  text={w.text}
-                  bold={w.bold}
-                  progress={scrollYProgress}
-                  rangeStart={i / WORDS.length}
-                  rangeEnd={(i + 1) / WORDS.length}
-                />
-              ))}
-            </p>
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-12 items-start">
 
+            {/* Left — label (desktop only) */}
+            <div className="hidden lg:flex items-center gap-2 text-sm text-gray-500 pt-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
+                <path d="M16 3.13a4 4 0 010 7.75"/>
+                <path d="M21 21v-2a4 4 0 00-3-3.87"/>
+              </svg>
+              Testimonials
+            </div>
+
+            {/* Right — word-by-word reveal */}
+            <div>
+              <p className="text-3xl sm:text-4xl lg:text-5xl leading-snug text-gray-900">
+                {WORDS.map((w, i) => (
+                  <WordToken
+                    key={i}
+                    text={w.text}
+                    bold={w.bold}
+                    progress={scrollYProgress}
+                    rangeStart={i / WORDS.length}
+                    rangeEnd={(i + 1) / WORDS.length}
+                  />
+                ))}
+              </p>
+            </div>
+
+          </div>
         </div>
+
+        {/* Bottom fade — same as Noora section exit */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-pink-50 pointer-events-none" />
       </div>
     </div>
   );
